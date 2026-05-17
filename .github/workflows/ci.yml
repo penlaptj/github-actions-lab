@@ -1,0 +1,35 @@
+# Nom du workflow — affiché dans l'onglet Actions
+name: CI Python
+
+# Déclencheurs
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+# Les jobs (= stages dans GitLab CI)
+jobs:
+  test:
+    # Runner GitHub hébergé — ubuntu gratuit
+    runs-on: ubuntu-latest
+
+    # Steps (= script dans GitLab CI)
+    steps:
+      # Action réutilisable : checkout du code
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Action réutilisable : installer Python
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      # Commande shell classique
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      # Lancer les tests
+      - name: Run tests
+        run: pytest test_app.py -v
